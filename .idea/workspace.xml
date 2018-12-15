@@ -26,16 +26,16 @@
       <file leaf-file-name="BookingBot.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/BookingBot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="756">
-              <caret line="40" column="68" selection-start-line="40" selection-start-column="68" selection-end-line="40" selection-end-column="68" />
+            <state relative-caret-position="693">
+              <caret line="78" column="38" selection-start-line="78" selection-start-column="38" selection-end-line="78" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#BookingBot#0;class#BookingBot#0" />
                 <element signature="method#main#0;class#BookingBot#0" />
                 <element signature="method#onDocument#0;class#BookingBot#0" />
-                <element signature="method#onCommand#0;class#BookingBot#0" />
                 <element signature="method#onImages#0;class#BookingBot#0" />
-                <element signature="method#onText#0;class#BookingBot#0" />
+                <element signature="e#2955#2956#0" expanded="true" />
+                <element signature="e#3007#3008#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -216,15 +216,15 @@
       <option name="presentableId" value="Default" />
       <updated>1544806548772</updated>
       <workItem from="1544806554058" duration="2188000" />
-      <workItem from="1544878454985" duration="13698000" />
+      <workItem from="1544878454985" duration="14031000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15886000" />
+    <option name="totallyTimeSpent" value="16219000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-380" y="752" width="1936" height="1056" extended-state="1" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
@@ -282,9 +282,9 @@
             <element signature="method#BookingBot#0;class#BookingBot#0" />
             <element signature="method#main#0;class#BookingBot#0" />
             <element signature="method#onDocument#0;class#BookingBot#0" />
-            <element signature="method#onCommand#0;class#BookingBot#0" />
             <element signature="method#onImages#0;class#BookingBot#0" />
-            <element signature="method#onText#0;class#BookingBot#0" />
+            <element signature="e#2955#2956#0" expanded="true" />
+            <element signature="e#3007#3008#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -311,16 +311,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BookingBot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="756">
-          <caret line="40" column="68" selection-start-line="40" selection-start-column="68" selection-end-line="40" selection-end-column="68" />
+        <state relative-caret-position="693">
+          <caret line="78" column="38" selection-start-line="78" selection-start-column="38" selection-end-line="78" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#BookingBot#0;class#BookingBot#0" />
             <element signature="method#main#0;class#BookingBot#0" />
             <element signature="method#onDocument#0;class#BookingBot#0" />
-            <element signature="method#onCommand#0;class#BookingBot#0" />
             <element signature="method#onImages#0;class#BookingBot#0" />
-            <element signature="method#onText#0;class#BookingBot#0" />
+            <element signature="e#2955#2956#0" expanded="true" />
+            <element signature="e#3007#3008#0" expanded="true" />
           </folding>
         </state>
       </provider>

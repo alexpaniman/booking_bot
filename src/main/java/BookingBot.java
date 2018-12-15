@@ -39,6 +39,7 @@ public class BookingBot implements Bot {
     }
 
     public void onCommand(Command command, User user, long chat_id) {
+        bot.sendMessage(chat_id, "Command!");
         if (command.getTitle().equals("/admin-sql")) {
             bot.sendMessage(chat_id, "Command!");
             if (command.containsParameter("@")) {
@@ -75,6 +76,6 @@ public class BookingBot implements Bot {
     }
 
     public void onText(String text, User user, long chat_id) {
-
+        bot.sendMessage(chat_id, "Text!");
     }
 }
