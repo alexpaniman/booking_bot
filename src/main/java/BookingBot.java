@@ -40,6 +40,7 @@ public class BookingBot implements Bot {
 
     public void onCommand(Command command, User user, long chat_id) {
         if (command.getTitle().equals("/admin-sql")) {
+            bot.sendMessage(chat_id, "Command!");
             if (command.containsParameter("@")) {
                 try {
                     Connection connection = heroku.getConnection();
@@ -63,6 +64,7 @@ public class BookingBot implements Bot {
                     bot.sendMessage(chat_id, stringBuilder.toString());
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    bot.sendMessage(chat_id, e.toString());
                 }
             }
         }
