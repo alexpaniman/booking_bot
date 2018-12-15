@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.telegrambots</groupId>
+  <artifactId>BookingBot</artifactId>
+  <versioning>
+    <release>1.0-Alpha</release>
+    <versions>
+      <version>1.0-Alpha</version>
+    </versions>
+    <lastUpdated>20181215200244</lastUpdated>
+  </versioning>
+</metadata>
