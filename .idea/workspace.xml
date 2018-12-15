@@ -17,8 +17,8 @@
       <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="33" column="28" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
+            <state relative-caret-position="-216">
+              <caret line="7" column="39" lean-forward="true" selection-start-line="7" selection-start-column="39" selection-end-line="7" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -26,13 +26,16 @@
       <file leaf-file-name="BookingBot.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/BookingBot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="613">
-              <caret line="76" lean-forward="true" selection-start-line="76" selection-end-line="76" />
+            <state relative-caret-position="650">
+              <caret line="76" column="45" selection-start-line="76" selection-start-column="45" selection-end-line="76" selection-end-column="45" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="method#BookingBot#0;class#BookingBot#0" />
                 <element signature="method#main#0;class#BookingBot#0" />
                 <element signature="method#onDocument#0;class#BookingBot#0" />
                 <element signature="method#onImages#0;class#BookingBot#0" />
+                <element signature="e#2838#2839#0" expanded="true" />
+                <element signature="e#2890#2891#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -126,6 +129,14 @@
               <item name="BookingBot" type="b2602c69:ProjectViewProjectNode" />
               <item name="BookingBot" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="org" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BookingBot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BookingBot" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -210,15 +221,15 @@
       <option name="presentableId" value="Default" />
       <updated>1544806548772</updated>
       <workItem from="1544806554058" duration="2188000" />
-      <workItem from="1544878454985" duration="10888000" />
+      <workItem from="1544878454985" duration="13134000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13076000" />
+    <option name="totallyTimeSpent" value="15322000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="40" y="952" width="1936" height="1056" extended-state="1" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
@@ -238,7 +249,7 @@
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.0" />
       <window_info anchor="right" id="Bean Validation" order="3" />
       <window_info anchor="right" id="Database" order="3" />
-      <window_info id="Learn" order="2" />
+      <window_info id="Learn" order="2" weight="0.32995737" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
@@ -273,9 +284,12 @@
           <caret line="45" column="40" selection-start-line="45" selection-start-column="40" selection-end-line="45" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#BookingBot#0;class#BookingBot#0" />
             <element signature="method#main#0;class#BookingBot#0" />
             <element signature="method#onDocument#0;class#BookingBot#0" />
             <element signature="method#onImages#0;class#BookingBot#0" />
+            <element signature="e#2838#2839#0" expanded="true" />
+            <element signature="e#2890#2891#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -292,20 +306,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="33" column="28" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
+        <state relative-caret-position="-216">
+          <caret line="7" column="39" lean-forward="true" selection-start-line="7" selection-start-column="39" selection-end-line="7" selection-end-column="39" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BookingBot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="613">
-          <caret line="76" lean-forward="true" selection-start-line="76" selection-end-line="76" />
+        <state relative-caret-position="650">
+          <caret line="76" column="45" selection-start-line="76" selection-start-column="45" selection-end-line="76" selection-end-column="45" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#BookingBot#0;class#BookingBot#0" />
             <element signature="method#main#0;class#BookingBot#0" />
             <element signature="method#onDocument#0;class#BookingBot#0" />
             <element signature="method#onImages#0;class#BookingBot#0" />
+            <element signature="e#2838#2839#0" expanded="true" />
+            <element signature="e#2890#2891#0" expanded="true" />
           </folding>
         </state>
       </provider>

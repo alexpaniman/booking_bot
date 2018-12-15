@@ -40,7 +40,7 @@ public class BookingBot implements Bot {
     }
 
     public void onCommand(Command command, User user, long chat_id) {
-        if (command.getTitle().equals("/admin-sql")) {
+        /*if (command.getTitle().equals("/admin-sql")) {
             if (command.containsParameter("@")) {
                 try {
                     Connection connection = heroku.getConnection();
@@ -66,7 +66,7 @@ public class BookingBot implements Bot {
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
     }
 
     public void onImages(File[] files, User user, long chat_id) {
@@ -74,6 +74,6 @@ public class BookingBot implements Bot {
     }
 
     public void onText(String text, User user, long chat_id) {
-
+        bot.sendMessage(chat_id, "Работает!");
     }
 }
