@@ -8,8 +8,7 @@ import org.update.User;
 
 import java.io.File;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class BookingBot implements Bot {
     private Heroku heroku = new Heroku();
@@ -28,7 +27,17 @@ public class BookingBot implements Bot {
         BookingBot bot = new BookingBot();
         TelegramBotsApi botsApi = new TelegramBotsApi();
         try {
-            botsApi.registerBot(bot.bot);
+            botsApi.registerBot(
+                    bot
+                            .bot
+                            .setInitMap(
+                                    new LinkedHashMap<String, String>() {
+                                        {
+                                            put("RESERVE", "NULL");
+                                        }
+                                    }
+                            )
+            );
         } catch (TelegramApiRequestException e) {
             e.printStackTrace();
         }
@@ -39,35 +48,8 @@ public class BookingBot implements Bot {
     }
 
     public void onCommand(Command command, User user, long chat_id) {
-        bot.sendMessage(chat_id, "Command!");
-        if (command.getTitle().equals("/admin-sql")) {
-            bot.sendMessage(chat_id, "Command!");
-            if (command.containsParameter("@")) {
-                try {
-                    Connection connection = heroku.getConnection();
-                    DatabaseMetaData DBMD = connection.getMetaData();
-                    String[] types = {"TABLE"};
-                    ResultSet table = DBMD.getTables(null, null, "%", types);
-                    List<String> tables = new ArrayList<>();
-                    while (table.next())
-                        tables.add(table.getString("TABLE_NAME"));
-                    StringBuilder stringBuilder = new StringBuilder();
-                    for (String DB : tables) {
-                        ResultSet RS = connection.createStatement().executeQuery("SELECT * FROM " + DB);
-                        ResultSetMetaData RSMD = RS.getMetaData();
-                        stringBuilder.append(DB).append(":\n");
-                        while (RS.next()) {
-                            stringBuilder.append("\t\tValue :\n");
-                            for (int i = 1; i <= RSMD.getColumnCount(); i++)
-                                stringBuilder.append("\t\t\t\t").append(RSMD.getColumnName(i)).append(" = '").append(RS.getString(i)).append("'\n");
-                        }
-                    }
-                    bot.sendMessage(chat_id, stringBuilder.toString());
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    bot.sendMessage(chat_id, e.toString());
-                }
-            }
+        if (command.getTitle().equals("admin-sql")) {
+            bot.sendMessage(chat_id, heroku.url);
         }
     }
 
@@ -76,6 +58,13 @@ public class BookingBot implements Bot {
     }
 
     public void onText(String text, User user, long chat_id) {
-        bot.sendMessage(chat_id, "Text!");
+        Connection connection = heroku.getConnection();
+        try {
+            connection.createStatement().execute(text);
+            bot.sendMessage(chat_id, "Выполнено!");
+        } catch (SQLException e) {
+            bot.sendMessage(chat_id, "Что-то пошло не так!");
+            e.printStackTrace();
+        }
     }
 }

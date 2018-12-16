@@ -59,7 +59,7 @@ public class UsersList {
     public void updateArgument(long id, String arg, String newValue) {
         try {
             connector.getConnection().createStatement().execute(
-                    "UPDATE USERS SET " + arg + " = '" + newValue + "' WHERE ID = '" + id + "'"
+                    "UPDATE USERS SET " + arg + " = '" + newValue + "' WHERE ID = " + id
             );
         } catch (Throwable thr) {
             thr.printStackTrace();
