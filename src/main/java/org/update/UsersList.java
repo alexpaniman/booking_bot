@@ -42,13 +42,15 @@ public class UsersList {
         for (Map.Entry<String, String> entry : user.arguments.entrySet())
             SQL.append(", ").append(entry.getKey());
         SQL.append(") VALUES (").append(user.id).append(", '");
-        for (long chat_id : user.chatId)
-            SQL.append(chat_id).append(" ");
-        SQL.append("', ").append(user.firstName).append(", ").append(user.lastName).append(", ").append(user.userName).append(", ").append(user.languageCode).append(", ").append(user.isBot);
+        long[] chatId = user.chatId;
+        for (int i = 0; i < chatId.length; i++) {
+            long chat_id = chatId[i];
+            SQL.append(chat_id).append(i == chatId.length - 1? "" : " ");
+        }
+        SQL.append("', '").append(user.firstName).append("', '").append(user.lastName).append("', '").append(user.userName).append("', '").append(user.languageCode).append("', '").append(user.isBot).append("'");
         for (Map.Entry<String, String> entry : user.arguments.entrySet())
-            SQL.append(", ").append(entry.getValue());
+            SQL.append(", '").append(entry.getValue()).append("'");
         SQL.append(");");
-        System.out.println(SQL);
         try {
             connector.getConnection().createStatement().execute(SQL.toString());
         } catch (Throwable thr) {

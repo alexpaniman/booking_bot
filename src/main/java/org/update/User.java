@@ -102,6 +102,18 @@ public class User {
         return isBot;
     }
 
+    public void addChatID(long chat_id) {
+        chatId = Arrays.copyOf(chatId, chatId.length + 1);
+        chatId[chatId.length - 1] = chat_id;
+        StringBuilder newValue = new StringBuilder();
+        for (int i = 0; i < chatId.length; i++) {
+            long Id = chatId[i];
+            newValue.append(Id).append(i == chatId.length - 1? "" : " ");
+        }
+        list.updateArgument(id, "CHAT_ID", newValue.toString());
+
+    }
+
     public void delete() {
         list.deleteUser(id);
     }

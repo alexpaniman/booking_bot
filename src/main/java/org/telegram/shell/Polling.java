@@ -73,6 +73,14 @@ public class Polling extends TelegramLongPollingBot {
                     usersList
             );
             usersList.addUser(user);
+        } else {
+            boolean old_chat_id = false;
+            for (long id : user.getChatIdArray())
+                if (id == message.getChatId()) {
+                    old_chat_id = true;
+                }
+            if (!old_chat_id)
+                user.addChatID(message.getChatId());
         }
         return user;
     }
@@ -93,6 +101,14 @@ public class Polling extends TelegramLongPollingBot {
                     usersList
             );
             usersList.addUser(user);
+        } else {
+            boolean old_chat_id = false;
+            for (long id : user.getChatIdArray())
+                if (id == CQ.getMessage().getChatId()) {
+                    old_chat_id = true;
+                }
+            if (!old_chat_id)
+                user.addChatID(CQ.getMessage().getChatId());
         }
         return user;
     }
@@ -353,9 +369,27 @@ public class Polling extends TelegramLongPollingBot {
     }
 
     public InlineKeyboardMarkup getIKM(String[] buttons_name, String[] string_labels, int per_row) {
-        Command[] commands = new Command[string_labels.length];
-        for (int i = 0; i < commands.length; i++)
-            commands[i] = new Command("label", string_labels[i], new ArrayList<>(), new ArrayList<>());
-        return getIKM(per_row, buttons_name, commands);
+        if (string_labels.length != buttons_name.length)
+            throw new IllegalArgumentException("IllegalArraysLength");
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        List<InlineKeyboardButton> row = new ArrayList<>();
+        for (int i = 0; i < buttons_name.length; i++) {
+            String name = buttons_name[i];
+            String label = string_labels[i];
+            row.add(new InlineKeyboardButton()
+                    .setText(name)
+                    .setCallbackData(label));
+            if (row.size() >= per_row) {
+                keyboard.add(row);
+                row = new ArrayList<>();
+            }
+            if (row.size() > 0 && i == buttons_name.length - 1) {
+                keyboard.add(row);
+                row = new ArrayList<>();
+            }
+        }
+        inlineKeyboardMarkup.setKeyboard(keyboard);
+        return inlineKeyboardMarkup;
     }
 }
