@@ -87,7 +87,7 @@
       <file leaf-file-name="BookingBot.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BookingBot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1458">
+            <state relative-caret-position="-891">
               <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -107,8 +107,8 @@
       <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="569">
-              <caret line="57" column="21" selection-start-line="57" selection-start-column="21" selection-end-line="57" selection-end-column="37" />
+            <state relative-caret-position="515">
+              <caret line="60" column="21" selection-start-line="60" selection-start-column="21" selection-end-line="60" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -133,13 +133,13 @@
         <option value="$PROJECT_DIR$/src/main/java/org/update/User.java" />
         <option value="$PROJECT_DIR$/src/main/java/Heroku.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/telegram/shell/Polling.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/Bot.java" />
         <option value="55bec393-6c16-43b1-929b-a9888f3443e8/database/***REMOVED***/schema/public/table/items.sql" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/55bec393-6c16-43b1-929b-a9888f3443e8/console.sql" />
         <option value="$PROJECT_DIR$/src/main/resources/booking.script" />
         <option value="$PROJECT_DIR$/src/main/java/SecondBookingBot.java" />
         <option value="$PROJECT_DIR$/src/main/java/BookingBot.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -208,6 +208,10 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="BookingBot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -227,7 +231,7 @@
     <property name="last_opened_file_path" value="$MAVEN_REPOSITORY$/com/telegrambots/DBSoT/1.1.0-beta/DBSoT-1.1.0-beta.jar!/" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Global Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="SQL Dialects" />
@@ -327,12 +331,12 @@
       <workItem from="1544956196303" duration="9274000" />
       <workItem from="1545047399366" duration="16762000" />
       <workItem from="1548506190433" duration="22734000" />
-      <workItem from="1548580872015" duration="31268000" />
+      <workItem from="1548580872015" duration="31549000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="96775000" />
+    <option name="totallyTimeSpent" value="97056000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -354,7 +358,7 @@
       <window_info id="Image Layers" order="2" />
       <window_info anchor="bottom" id="Java Enterprise" order="7" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.0" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.70043576" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.33769062" />
       <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.0" />
       <window_info anchor="bottom" id="Database Console" weight="0.0" />
@@ -730,7 +734,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BookingBot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1458">
+        <state relative-caret-position="-891">
           <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -748,8 +752,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="569">
-          <caret line="57" column="21" selection-start-line="57" selection-start-column="21" selection-end-line="57" selection-end-column="37" />
+        <state relative-caret-position="515">
+          <caret line="60" column="21" selection-start-line="60" selection-start-column="21" selection-end-line="60" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -782,6 +786,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
+          <last-edited>DBSoT-1.1.0-beta</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
