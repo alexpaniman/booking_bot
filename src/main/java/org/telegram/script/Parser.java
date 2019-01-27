@@ -105,7 +105,7 @@ public class Parser {
         Stage stage = null;
         if (var != null)
             stage = new VariableStage(num, text, variable, type, var);
-        if (data.size() > 0)
+        else if (text != null)
             stage = new DataStage(num, text, variable, type, data);
         if (stage != null)
             stages.add(stage);
