@@ -37,6 +37,7 @@ public class BookingBot implements org.telegram.shell.Bot {
                         .setScripts(new ScriptsCompiler().compile("src/main/resources/booking.script"))
                         .setInitMap(new LinkedHashMap<String, String>() {{
                             put("status", "null");
+                            put("admin", "false");
                         }})
         );
     }
