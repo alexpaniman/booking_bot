@@ -1,10 +1,2 @@
 BookingBot.class
-Heroku.class
-org\telegram\shell\Bot.class
 BookingBot$1.class
-org\telegram\shell\Polling.class
-org\update\UsersList$1.class
-org\processor\Command.class
-org\database\DataBaseConnector.class
-org\update\User.class
-org\update\UsersList.class
