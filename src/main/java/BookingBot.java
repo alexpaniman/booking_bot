@@ -150,7 +150,7 @@ public class BookingBot implements org.telegram.shell.Bot {
                 StringBuilder stringBuilder = new StringBuilder();
                 List<Item> its = find();
                 for (String subject : new String[]{"WorldHistory", "UkrainianHistory"}) {
-                    stringBuilder.append(subject.equals("WorldHistory")? "Всемирная история:" : "История Украины:").append("\n");
+                    stringBuilder.append("` ` `***").append(subject.equals("WorldHistory")? "Всемирная история:" : "История Украины:").append("\n***` ` `");
                     for (int j = 0; j < 2; j++) {
                         for (String date : find(subject, null, null, 2, j == 0, its)
                                 .stream()
@@ -164,7 +164,7 @@ public class BookingBot implements org.telegram.shell.Bot {
                                     return new Date();
                                 }))
                                 .collect(Collectors.toList())) {
-                            stringBuilder.append("\t` ` `***").append(date).append(":***` ` `\n");
+                            stringBuilder.append("\t` ` `___").append(date).append(":___` ` `\n");
                             for (String item : find(subject, date, null, 0, j == 0, its)) {
                                 stringBuilder.append("\t\t\t").append(item).append(repeat(7 - item.length()));
                                 for (String reserved : find(subject, date, item, 3, j == 0, its)) {
@@ -180,6 +180,7 @@ public class BookingBot implements org.telegram.shell.Bot {
                         if (j == 0)
                             stringBuilder.append("\n");
                     }
+                    stringBuilder.append("\n\n");
                 }
                 bot.sendMessage(chat_id, "` ` `".concat(stringBuilder.toString()).concat("` ` `"));
                 return;
