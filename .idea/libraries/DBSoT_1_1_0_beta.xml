@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="DBSoT-1.1.0-beta">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/telegrambots/DBSoT/1.1.0-beta/DBSoT-1.1.0-beta.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

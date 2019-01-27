@@ -1,29 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="51b39136-9270-46d7-ad3d-af494f096730" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BookingBot.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Heroku.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/database/DataBaseConnector.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/database/URLConnector.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/processor/Command.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/telegram/shell/Bot.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/telegram/shell/Polling.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/update/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/update/UsersList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/BookingBot.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/BookingBot.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Heroku.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/database/DataBaseConnector.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/database/URLConnector.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/processor/Command.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/telegram/shell/Bot.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/telegram/shell/Polling.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/update/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/update/UsersList$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/update/UsersList.class" beforeDir="false" />
-    </list>
+    <list default="true" id="51b39136-9270-46d7-ad3d-af494f096730" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -106,10 +84,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BookingBot.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BookingBot.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BookingBot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="567">
+            <state relative-caret-position="-1458">
               <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -126,58 +104,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Script.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/com/telegrambots/DBSoT/1.1.0-beta/DBSoT-1.1.0-beta.jar!/org/telegram/script/Script.class">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="23" selection-start-line="23" selection-end-line="23" />
-              <folding>
-                <element signature="e#494#495#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Response.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/com/telegrambots/DBSoT/1.1.0-beta/DBSoT-1.1.0-beta.jar!/org/telegram/script/Response.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="38" selection-start-line="38" selection-end-line="38" />
-              <folding>
-                <element signature="e#668#669#0" expanded="true" />
-                <element signature="e#702#703#0" expanded="true" />
-                <element signature="e#834#835#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Scripts.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/com/telegrambots/DBSoT/1.1.0-beta/DBSoT-1.1.0-beta.jar!/org/telegram/script/Scripts.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="17" selection-start-line="17" selection-end-line="17" />
-              <folding>
-                <element signature="e#372#373#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DefaultBotSession.class" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/telegram/telegrambots/3.5/telegrambots-3.5.jar!/org/telegram/telegrambots/updatesreceivers/DefaultBotSession.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="147">
-              <caret line="157" selection-start-line="157" selection-end-line="157" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="console.sql" pinned="false" current-in-tab="false">
-        <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/55bec393-6c16-43b1-929b-a9888f3443e8/console.sql">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="19" selection-start-column="19" selection-end-column="19" />
+            <state relative-caret-position="569">
+              <caret line="57" column="21" selection-start-line="57" selection-start-column="21" selection-end-line="57" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -286,12 +217,19 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="true" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="PostgreSQL" />
     <property name="database.console.LAST_STATE" value="false" />
+    <property name="last_opened_file_path" value="$MAVEN_REPOSITORY$/com/telegrambots/DBSoT/1.1.0-beta/DBSoT-1.1.0-beta.jar!/" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="SQL Dialects" />
   </component>
   <component name="RecentsManager">
@@ -389,12 +327,12 @@
       <workItem from="1544956196303" duration="9274000" />
       <workItem from="1545047399366" duration="16762000" />
       <workItem from="1548506190433" duration="22734000" />
-      <workItem from="1548580872015" duration="30614000" />
+      <workItem from="1548580872015" duration="31268000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="96121000" />
+    <option name="totallyTimeSpent" value="96775000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -418,7 +356,7 @@
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.0" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.33769062" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.0" />
+      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.0" />
       <window_info anchor="bottom" id="Database Console" weight="0.0" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1640625" />
       <window_info anchor="right" id="Bean Validation" order="3" />
@@ -588,9 +526,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Procfile">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/database/URLConnector.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/Heroku.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/org/update/UsersList.java" />
@@ -627,13 +562,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
           <caret line="16" column="17" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="835">
-          <caret line="60" selection-start-line="60" selection-end-line="60" />
         </state>
       </provider>
     </entry>
@@ -797,9 +725,12 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Procfile">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BookingBot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
+        <state relative-caret-position="-1458">
           <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -815,12 +746,91 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="569">
+          <caret line="57" column="21" selection-start-line="57" selection-start-column="21" selection-end-line="57" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
   </component>
   <component name="masterDetails">
     <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>BookingBot</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
       <state key="ProjectJDKs.UI">
         <settings>
           <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>DBSoT-1.1.0-beta</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
