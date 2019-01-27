@@ -1,0 +1,15 @@
+Script("Reserve"):
+    1 -> "Выберите предмет:"(Inline, "Subject"):
+        "Всемирная история" : "WorldHistory"
+        "История Украины"   : "UkrainianHistory"
+    2 -> "Выберите дату:"(Inline, "Date"): <date>
+    2 -> "Выберите пункт:"(Inline, "Item"): <items>
+Script("Add"):
+    1 -> "Выбирите предмет:"(Inline, "Subject"):
+        "Всемирная история" : "WorldHistory"
+        "История Украины"   : "UkrainianHistory"
+    1 -> "Введите дату(yyyy-mm-dd):"(Inline, "Date"):
+    1 -> "Введите пункт '§<Параграф>(<Пункт от> - <Пункт до>, <Пункт>, ...), ...' :"(Inline, "Item"):
+Script("Start"):
+    1 -> "Введите свое настоящее имя:"(Inline, "FirstName"):
+    1 -> "Введите свою настоящую фамилию:"(Inline, "LastName"):

@@ -1,22 +1,25 @@
-import org.database.DataBaseConnector;
-import org.database.URLConnector;
-import org.processor.Command;
-import org.telegram.shell.Bot;
+import org.telegram.database.DataBaseConnector;
+import org.telegram.database.URLConnector;
+import org.telegram.processor.Command;
+import org.telegram.script.Button;
+import org.telegram.script.ScriptsCompiler;
 import org.telegram.shell.Polling;
 import org.telegram.telegrambots.ApiContextInitializer;
-import org.telegram.telegrambots.TelegramBotsApi;
-import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
-import org.update.User;
+import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.update.User;
 
-import java.io.File;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class BookingBot implements Bot {
+public class BookingBot implements org.telegram.shell.Bot {
     private DataBaseConnector heroku = new URLConnector("***REMOVED***");
     private Polling bot = new Polling(
             ***REMOVED***,
@@ -25,220 +28,305 @@ public class BookingBot implements Bot {
             this
     );
 
-    public BookingBot() {
-    }
-
-    private void addItem(long id, String item, String date, String subject) {
-        try {
-            heroku.getConnection().createStatement().execute("INSERT INTO ITEMS VALUES('" + item + "', '" + subject + "', '" + date + "', " + id + ")");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void reserve(String item, String date, String subject, long id) {
-        try {
-            heroku.getConnection().createStatement().execute("UPDATE ITEMS SET RESERVED = " + id + " WHERE ITEM = '" + item + "' AND DATE = '" + date + "' AND SUBJECT = '" + subject + "'");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private boolean reserved(String subject, String date, long id) {
-        try {
-            return heroku.getConnection().createStatement().executeQuery("SELECT * FROM ITEMS WHERE RESERVED = " + id + " AND SUBJECT = '" + subject + "' AND DATE = '" + date + "'").next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return true;
-        }
-    }
-
-    private boolean reserved(String subject, String date, String item) {
-        try {
-            return heroku.getConnection().createStatement().executeQuery("SELECT * FROM ITEMS WHERE ITEM = " + item + " AND SUBJECT = '" + subject + "' AND DATE = '" + date + "' AND RESERVED = NULL").next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return true;
-        }
-    }
-
-    private String[] dates(long id, String subject) {
-        try {
-            ResultSet rs = heroku.getConnection().createStatement().executeQuery("SELECT * FROM ITEMS WHERE SUBJECT = '" + subject + "'");
-            List<String> dates = new ArrayList<>();
-            while (rs.next())
-                dates.add(rs.getString("DATE"));
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            Date currDate = new Date();
-            dates =
-                    dates
-                            .stream()
-                            .map(source -> {
-                                try {
-                                    return df.parse(source);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                    return null;
-                                }
-                            })
-                            .filter(Objects::nonNull)
-                            .filter(date -> date.after(currDate))
-                            .map(df::format)
-                            .filter(el -> !reserved(subject, el, id))
-                            .collect(Collectors.toCollection(ArrayList::new));
-            return dates.toArray(new String[0]);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new String[0];
-        }
-    }
-
-    private String[] items(String subject, String date) {
-        try {
-            ResultSet rs = heroku.getConnection().createStatement().executeQuery("SELECT * FROM ITEMS WHERE SUBJECT = '" + subject + "' AND DATE = '" + date + "'");
-            List<String> dates = new ArrayList<>();
-            while (rs.next())
-                dates.add(rs.getString("ITEM"));
-            return dates.toArray(new String[0]);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new String[0];
-        }
-    }
-
     public static void main(String[] args) {
         ApiContextInitializer.init();
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         BookingBot bot = new BookingBot();
-        TelegramBotsApi botsApi = new TelegramBotsApi();
-        try {
-            botsApi.registerBot(
-                    bot
-                            .bot
-            );
-        } catch (TelegramApiRequestException e) {
-            e.printStackTrace();
+        Polling.setUp(
+                bot
+                        .bot
+                        .setScripts(new ScriptsCompiler().compile("src/main/resources/booking.script"))
+                        .setInitMap(new LinkedHashMap<String, String>() {{
+                            put("status", "null");
+                        }})
+        );
+    }
+
+    private Statement statement() throws SQLException {
+        return heroku.getConnection().createStatement();
+    }
+
+    private class Item{
+        private String subject;
+        private String date;
+        private String item;
+        private String reserved;
+
+        public Item(String subject, String date, String item, String reserved) {
+            this.subject = subject;
+            this.date = date;
+            this.item = item;
+            this.reserved = reserved;
+        }
+
+        String getSubject() {
+            return subject;
+        }
+
+        String getDate() {
+            return date;
+        }
+
+        String getItem() {
+            return item;
+        }
+
+        String getReserved() {
+            return reserved;
         }
     }
 
-    public void onDocument(File file, User user, long chat) {
-
+    private List<Item> find() {
+        try {
+            List<Item> its = new ArrayList<>();
+            ResultSet rs = statement().executeQuery("SELECT * FROM items");
+            while (rs.next())
+                its.add(
+                        new Item(rs.getString("Subject"), rs.getString("Date"), rs.getString("Item"), rs.getString("Reserved"))
+                );
+            return its;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
+    private List<String> find(String subject, String date, String item, int result, boolean reserved, List<Item> its) {
+        if (its == null) {
+            String sql = "SELECT * FROM ITEMS WHERE ";
+            StringJoiner sj = new StringJoiner(" AND ");
+            if (subject != null)
+                sj.add("SUBJECT = '" + subject + "'");
+            if (date != null)
+                sj.add("DATE = '" + date + "'");
+            if (item != null)
+                sj.add("ITEM = '" + item + "'");
+            if (reserved)
+                sj.add("RESERVED IS NULL");
+            else
+                sj.add("NOT RESERVED IS NULL");
+            sql += sj.toString();
+            try {
+                ResultSet resultSet = statement().executeQuery(sql);
+                List<String> res = new ArrayList<>();
+                while (resultSet.next())
+                    res.add(resultSet.getString(result == 0 ? "ITEM" : (result == 1 ? "SUBJECT" : (result == 2 ? "DATE" : "RESERVED"))));
+                return res;
+            } catch (Exception exc) {
+                return new ArrayList<>();
+            }
+        } else {
+            return its
+                    .stream()
+                    .filter(el -> subject == null || el.getSubject().equals(subject))
+                    .filter(el -> date == null || el.getDate().equals(date))
+                    .filter(el -> item == null || el.getItem().equals(item))
+                    .filter(el -> reserved? el.getReserved() == null : el.getReserved() != null)
+                    .map(el -> result == 0? el.getItem() : (result == 1? el.getSubject() : (result == 2? el.getDate() : el.getReserved())))
+                    .collect(Collectors.toList());
+        }
+    }
+
+    private String repeat(int num) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < num; i ++)
+            sb.append(' ');
+        return sb.toString();
+    }
+
+    @Override
     public void onCommand(Command command, User user, long chat_id) {
-        switch (command.getTitle()) {
-            case "actions":
+        String title = command.getTitle();
+        if (title.equals("start")) {
+            bot.activateScript(user, chat_id, "Start");
+            return;
+        }
+        if (title.equals("reserve")) {
+            bot.activateScript(user, chat_id, "Reserve");
+            return;
+        }
+        try {
+            if (title.equals("list")) {
+                StringBuilder stringBuilder = new StringBuilder();
+                List<Item> its = find();
+                for (String subject : new String[]{"WorldHistory", "UkrainianHistory"}) {
+                    stringBuilder.append(subject.equals("WorldHistory")? "Всемирная история:" : "История Украины:").append("\n");
+                    for (int j = 0; j < 2; j++) {
+                        for (String date : find(subject, null, null, 2, j == 0, its)
+                                .stream()
+                                .distinct()
+                                .sorted(Comparator.comparing(date -> {
+                                    try {
+                                        return new SimpleDateFormat("yyyy-mm-dd").parse(date);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return new Date();
+                                }))
+                                .collect(Collectors.toList())) {
+                            stringBuilder.append("\t` ` `***").append(date).append(":***` ` `\n");
+                            for (String item : find(subject, date, null, 0, j == 0, its)) {
+                                stringBuilder.append("\t\t\t").append(item).append(repeat(7 - item.length()));
+                                for (String reserved : find(subject, date, item, 3, j == 0, its)) {
+                                    if (reserved == null) {
+                                        stringBuilder.append(" - свободен\n");
+                                        break;
+                                    }
+                                    User curr = bot.getUsersList().findUser(Long.parseLong(reserved));
+                                    stringBuilder.append(" - ").append(curr.getFirstName()).append(" ").append(curr.getLastName().equalsIgnoreCase("null") ? "" : curr.getLastName()).append("\n");
+                                }
+                            }
+                        }
+                        if (j == 0)
+                            stringBuilder.append("\n");
+                    }
+                }
+                bot.sendMessage(chat_id, "` ` `".concat(stringBuilder.toString()).concat("` ` `"));
+                return;
+            }
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        if (title.equals("add") && user.getArgument("admin").equals("t"))
+            bot.activateScript(user, chat_id, "Add");
+        if (title.equals("actions")) {
+            if (user.getArgument("admin").equals("t"))
                 bot.sendMessage(
                         chat_id,
                         "Действия:",
-                        bot.getIKM(
-                                new String[]{
-                                        "Забронировать пункт",
-                                        "Посмотреть список пунктов"
-                                },
-                                new String[]{
-                                        "/reserve",
-                                        "/items"
-                                },
-                                1
-                        )
+                        bot.inline(3, "/list", "/reserve", "/add")
                 );
-                break;
-            case "reserve":
-                if (command.numberOfParameters() == 0) {
-                    bot.sendMessage(
-                            chat_id,
-                            "Выберите предмет:",
-                            bot.getIKM(
-                                    new String[]{
-                                            "Всемирная история",
-                                            "История Украины",
-                                            "Юриспруденция"
-                                    },
-                                    new String[]{
-                                            "/reserve --world_history",
-                                            "/reserve --ukrainian_history",
-                                            "/reserve --jurisprudence"
-                                    },
-                                    1
-                            )
-                    );
+            else
+                bot.sendMessage(
+                        chat_id,
+                        "Действия:",
+                        bot.inline(2, "/list", "/reserve")
+                );
+        }
+    }
+
+    @Override
+    public void onBuilderResponse(User user, long chat_id, String script, Map<String, String> varMap) {
+        try {
+            if (script.equals("Reserve")) {
+                statement().execute("UPDATE ITEMS SET RESERVED = " + user.getId() + " WHERE RESERVED IS NULL AND DATE = '" + varMap.get("Date") + "' AND SUBJECT = '" + varMap.get("Subject") + "' AND ITEM = '" + varMap.get("Item") + "'");
+                bot.sendMessage(chat_id, "Вы успешно забронировали " + varMap.get("Item") + " пункт по " + (varMap.get("Subject").equals("WorldHistory") ? "Всемирной истории" : "Истории Украины") + " " + varMap.get("Date") + " числа.");
+                return;
+            }
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        if (script.equals("Start")) {
+            user.updateArgument("first_name", varMap.get("FirstName"));
+            user.updateArgument("last_name", varMap.get("LastName"));
+            return;
+        }
+        if (script.equals("Add")) {
+            try {
+                PreparedStatement ps = heroku.getConnection().prepareStatement("INSERT INTO ITEMS VALUES(?, '" + varMap.get("Subject") + "', '" + varMap.get("Date") + "', NULL)");
+                List<String> items = subItems(varMap.get("Item"));
+                if (items.size() == 0)
+                    return;
+                StringJoiner sj = new StringJoiner(", ");
+                for (String item: items) {
+                    ps.setString(1, item);
+                    sj.add(item);
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+                bot.sendMessage(chat_id, "Пункты: " + sj + " по " + (varMap.get("Subject").equals("WorldHistory")? "всемирной истории" : "истории Украины") + " " + varMap.get("Date") + " числа были успешно добавленны!");
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+        }
+    }
+
+    private List<String> forRegex(String regex, String str) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+        List<String> list = new ArrayList<>();
+        while (matcher.find())
+            list.add(str.substring(matcher.start(), matcher.end()));
+        return list;
+    }
+
+    private List<String> subItems(String str) {
+        List<String> items = new ArrayList<>();
+        for (String paragraph: forRegex("§\\d+\\(.+?\\)", str)) {
+            Pattern pattern = Pattern.compile("§\\d+");
+            Matcher matcher = pattern.matcher(paragraph);
+            if (!matcher.find())
+                throw new IllegalArgumentException();
+            String par = paragraph.substring(matcher.start(), matcher.end());
+            String its = paragraph.substring(matcher.end() + 1, paragraph.length() - 1);
+            String[] itemsArr = its.split(",");
+            for (String itm: itemsArr) {
+                String val = itm.trim();
+                if (val.matches("\\d+ *- *\\d+")) {
+                    List<String> list = forRegex("\\d+", val);
+                    int first = Integer.parseInt(list.get(0));
+                    int second = Integer.parseInt(list.get(1));
+                    for (int i = Math.min(first, second); i <= Math.max(first, second); i ++)
+                        items.add(par + "(" + i + ")");
                 } else {
-                    if (command.numberOfArguments() == 0) {
-                        String[] arr = dates(user.getId(), command.getParameter(0));
-                        if (arr.length == 0) {
-                            bot.sendMessage(chat_id, "В ближайшее время этого предмета не будет!");
-                            return;
-                        }
-                        bot.sendMessage(
-                                chat_id,
-                                "Выберите дату:",
-                                bot.getIKM(
-                                        arr,
-                                        Arrays
-                                                .stream(arr)
-                                                .map(el -> "/reserve --" + command.getParameter(0) + " \"" + el + "\"")
-                                                .toArray(String[]::new),
-                                        3
-                                )
-                        );
-                    } else {
-                        String[] arr = items(command.getParameter(0), command.getArgument(0));
-                        if (arr.length == 0) {
-                            bot.sendMessage(chat_id, "Пунктов по этому предмету в этот день нет!");
-                            return;
-                        }
-                        String subject = command.getParameter(0);
-                        String date = command.getArgument(0);
-                        if (reserved(subject, date, user.getId())) {
-                            bot.sendMessage(chat_id, "Вы уже бронировали пункт в этот день!");
-                            return;
-                        }
-                        bot.sendMessage(
-                                chat_id,
-                                "Выберите пункт:",
-                                bot.getIKM(
-                                        arr,
-                                        Arrays
-                                                .stream(arr)
-                                                .map(el -> "/book --" + command.getParameter(0) + " \"" + el + "\" " + "\"" + command.getArgument(0) + "\"")
-                                                .toArray(String[]::new),
-                                        3
-                                )
-                        );
+                    items.add(par + "(" + val + ")");
+                }
+            }
+        }
+        return items;
+    }
+    @Override
+    public List<Button> setupDataVariable(String dataVar, User user, long chat_id, String script, Map<String, String> varMap) {
+        List<Button> buttons = new ArrayList<>();
+        try {
+            if (script.equals("Reserve")) {
+                if (    !varMap.get("Subject").equals("WorldHistory") &&
+                        !varMap.get("Subject").equals("UkrainianHistory"))
+                    return null;
+                if (dataVar.equals("date")) {
+                    ResultSet resultSet = statement().executeQuery("SELECT * FROM ITEMS WHERE CURRENT_DATE <= DATE AND SUBJECT = '" + varMap.get("Subject") + "' AND RESERVED IS NULL");
+                    List<String> names = new ArrayList<>();
+                    while (resultSet.next()) {
+                        String date = resultSet.getString("DATE");
+                        names.add(date);
+                    }
+                    buttons =
+                            names
+                                    .stream()
+                                    .distinct()
+                                    .map(name -> new Button(name, name))
+                                    .collect(Collectors.toList());
+                    if (buttons.size() == 0) {
+                        bot.sendMessage(chat_id, "В ближайшее время не забронированных пунктов по этому предмету нет!");
+                        return null;
+                    }
+                } else if (dataVar.equals("items")) {
+                    try {
+                        new SimpleDateFormat("yyyy-mm-dd").parse(varMap.get("Date"));
+                    } catch (ParseException e) {
+                        return null;
+                    }
+                    ResultSet resultSet = statement().executeQuery("SELECT * FROM ITEMS WHERE DATE = '" + varMap.get("Date") + "' AND SUBJECT = '" + varMap.get("Subject") + "' AND RESERVED IS NULL");
+                    while (resultSet.next()) {
+                        String item = resultSet.getString("ITEM");
+                        buttons.add(new Button(item, item));
+                    }
+                    if (buttons.size() == 0) {
+                        bot.sendMessage(chat_id, "В этот день не забронированных пунктов по этому предмету нет!");
+                        return null;
                     }
                 }
-                break;
-            case "book":
-                String item = command.getArgument(0);
-                String subject = command.getParameter(0);
-                String date = command.getArgument(1);
-                if (reserved(subject, date, user.getId())) {
-                    bot.sendMessage(chat_id, "Вы уже бронировали пункт в этот день!");
-                    return;
-                }
-                reserve(item, date, subject, user.getId());
-                bot.sendMessage(chat_id, "Пункт успешно забронированн!");
-                break;
+            }
+        } catch (Exception exc) {
+            exc.printStackTrace();
         }
+        if (buttons.size() == 0)
+            return null;
+        return buttons;
     }
 
-    public void onImages(File[] files, User user, long chat_id) {
-
-    }
-
-    public void onText(String text, User user, long chat_id) {
-        Connection connection = heroku.getConnection();
-        try {
-            connection.createStatement().execute(text);
-            bot.sendMessage(chat_id, "Выполнено!");
-        } catch (SQLException e) {
-            bot.sendMessage(chat_id, text);
-            e.printStackTrace();
-        }
+    @Override
+    public void onUpdate(Update update, User user, long chat_id) {
+        if (update.hasCallbackQuery())
+            bot.deleteMessage(chat_id, update.getCallbackQuery().getMessage().getMessageId());
     }
 }
