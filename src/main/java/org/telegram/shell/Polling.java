@@ -213,7 +213,8 @@ public class Polling extends TelegramLongPollingBot {
                 String text = message.getText();
                 Command command = Command.parseCommand("/", text);
                 long chat_id = message.getChatId();
-                bot.onUpdate(update, user, chat_id);
+                if (!bot.onUpdate(update, user, chat_id))
+                    return;
                 String value = user.getArgument("status");
                 if (value != null && !value.equalsIgnoreCase("NULL")) {
                     Response response = gson.fromJson(value, Response.class);
@@ -268,7 +269,8 @@ public class Polling extends TelegramLongPollingBot {
             }
             if (message.hasPhoto()) {
                 long chat_id = message.getChatId();
-                bot.onUpdate(update, user, chat_id);
+                if (!bot.onUpdate(update, user, chat_id))
+                    return;
                 bot.onImages(
                         message
                                 .getPhoto()
@@ -287,7 +289,8 @@ public class Polling extends TelegramLongPollingBot {
             }
             if (message.hasDocument()) {
                 long chat_id = message.getChatId();
-                bot.onUpdate(update, user, chat_id);
+                if (!bot.onUpdate(update, user, chat_id))
+                    return;
                 try {
                     bot.onDocument(
                             downloadFile(
@@ -314,7 +317,8 @@ public class Polling extends TelegramLongPollingBot {
             Command command = Command.parseCommand("/", data);
             User user = findUser(CQ);
             long chat_id = CQ.getMessage().getChatId();
-            bot.onUpdate(update, user, chat_id);
+            if (!bot.onUpdate(update, user, chat_id))
+                return;
             String value = user.getArgument("status");
             if (value != null && !value.equalsIgnoreCase("NULL")) {
                 Response response = gson.fromJson(value, Response.class);

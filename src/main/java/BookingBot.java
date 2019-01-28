@@ -38,6 +38,7 @@ public class BookingBot implements org.telegram.shell.Bot {
                         .setInitMap(new LinkedHashMap<String, String>() {{
                             put("status", "null");
                             put("admin", "false");
+                            put("ban", "0");
                         }})
         );
     }
@@ -91,6 +92,14 @@ public class BookingBot implements org.telegram.shell.Bot {
         }
     }
 
+    @SuppressWarnings("deprecation")
+    private boolean after(Date date, Date otherDate) {
+        if (date.getYear() >= otherDate.getYear())
+            if (date.getMonth() >= otherDate.getMonth())
+                return date.getDay() >= otherDate.getDay();
+        return false;
+    }
+
     private List<String> find(String subject, String date, String item, int result, boolean reserved, List<Item> its) {
         if (its == null) {
             String sql = "SELECT * FROM ITEMS WHERE ";
@@ -118,6 +127,14 @@ public class BookingBot implements org.telegram.shell.Bot {
         } else {
             return its
                     .stream()
+                    .filter(el -> {
+                        try {
+                            return after(new SimpleDateFormat("yyyy-MM-dd").parse(el.getDate()), new Date());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+                    })
                     .filter(el -> subject == null || el.getSubject().equals(subject))
                     .filter(el -> date == null || el.getDate().equals(date))
                     .filter(el -> item == null || el.getItem().equals(item))
@@ -145,6 +162,26 @@ public class BookingBot implements org.telegram.shell.Bot {
             bot.activateScript(user, chat_id, "Reserve");
             return;
         }
+        if (title.equals("ban") && command.numberOfArguments() == 2 && command.numberOfParameters() == 1 && user.getArgument("admin").equals("t")) {
+            try {
+                Statement st = statement();
+                if (command.getParameter(0).equals("Infinity"))
+                    st.execute("UPDATE users SET ban = 'Infinity' WHERE first_name = '" + command.getArgument(0) + "' AND last_name = '" + command.getArgument(1) + "'");
+                else
+                    st.execute("UPDATE users SET ban = '" + (long)((System.currentTimeMillis() + Double.parseDouble(command.getParameter(0)) * 3.6e+6)) + "' WHERE first_name = '" + command.getArgument(0) + "' AND last_name = '" + command.getArgument(1) + "'");
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+        }
+        if (title.equals("unBan") && command.numberOfArguments() == 2 && user.getArgument("admin").equals("t")) {
+            try {
+                statement().execute("UPDATE users SET ban = '0' WHERE first_name = '" + command.getArgument(0) + "' AND last_name = '" + command.getArgument(1) + "'");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (title.equals("selfBan"))
+            user.updateArgument("ban", "Infinity");
         try {
             if (title.equals("list")) {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -157,7 +194,7 @@ public class BookingBot implements org.telegram.shell.Bot {
                                 .distinct()
                                 .sorted(Comparator.comparing(date -> {
                                     try {
-                                        return new SimpleDateFormat("yyyy-mm-dd").parse(date);
+                                        return new SimpleDateFormat("yyyy-MM-dd").parse(date);
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
@@ -282,7 +319,8 @@ public class BookingBot implements org.telegram.shell.Bot {
         try {
             if (script.equals("Reserve")) {
                 if (    !varMap.get("Subject").equals("WorldHistory") &&
-                        !varMap.get("Subject").equals("UkrainianHistory"))
+                        !varMap.get("Subject").equals("UkrainianHistory")
+                   )
                     return null;
                 if (dataVar.equals("date")) {
                     ResultSet resultSet = statement().executeQuery("SELECT * FROM ITEMS WHERE CURRENT_DATE <= DATE AND SUBJECT = '" + varMap.get("Subject") + "' AND RESERVED IS NULL");
@@ -303,7 +341,7 @@ public class BookingBot implements org.telegram.shell.Bot {
                     }
                 } else if (dataVar.equals("items")) {
                     try {
-                        new SimpleDateFormat("yyyy-mm-dd").parse(varMap.get("Date"));
+                        new SimpleDateFormat("yyyy-MM-dd").parse(varMap.get("Date"));
                     } catch (ParseException e) {
                         return null;
                     }
@@ -327,8 +365,19 @@ public class BookingBot implements org.telegram.shell.Bot {
     }
 
     @Override
-    public void onUpdate(Update update, User user, long chat_id) {
+    public boolean onUpdate(Update update, User user, long chat_id) {
+        String banStr = user.getArgument("ban");
+        if (banStr.equals("Infinity")) {
+            bot.sendMessage(chat_id, "Вы находитесь в перманентном бане! Не пытайтесь выбраться. Это... невозможно!");
+            return false;
+        }
+        long ban = Long.parseLong(banStr);
+        if (ban > System.currentTimeMillis()) {
+            bot.sendMessage(chat_id, "Вы находитесь в временном бане. Он закончится через " + String.format("%.2f", Math.ceil((ban - System.currentTimeMillis())/3.6e+6)) + " часов!");
+            return false;
+        }
         if (update.hasCallbackQuery())
             bot.deleteMessage(chat_id, update.getCallbackQuery().getMessage().getMessageId());
+        return true;
     }
 }
