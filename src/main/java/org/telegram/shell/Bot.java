@@ -15,10 +15,10 @@ public interface Bot {
     default void onDocument(File file, User user, long chat_id) {}
     default void onImages(File[] file, User user, long chat_id) {}
     default void onText(String text, User user, long chat_id) {}
+    default void onBuilderResponse(User user, long chat_id, String script, Map<String, String> builderResponse) {}
     default boolean onUpdate(Update update, User user, long chat_id) {
         return true;
     }
-    default void onBuilderResponse(User user, long chat_id, String script, Map<String, String> builderResponse) {}
     default List<Button> setupDataVariable(String dataVar, User user, long chat_id, String script, Map<String, String> varMap) {
         return new ArrayList<>();
     }

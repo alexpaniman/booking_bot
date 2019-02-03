@@ -1,14 +1,71 @@
 package org.telegram.script;
 
-import com.google.gson.GsonBuilder;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Parser {
+class Parser {
+    //Script("Name"):
+    private static final TokenType[] script = new TokenType[]{
+            TokenType.Script,
+            TokenType.LRB,
+            TokenType.String,
+            TokenType.RRB,
+            TokenType.Colon
+    };
+
+    //Number -> "Text"(MarkupType, "Variable"):
+    private static final TokenType[] stage = new TokenType[]{
+            TokenType.Literal,
+            TokenType.Lambda,
+            TokenType.String,
+            TokenType.LRB,
+            TokenType.MarkupType,
+            TokenType.Coma,
+            TokenType.String,
+            TokenType.RRB,
+            TokenType.Colon
+    };
+
+    //Number -> "Text"(MarkupType, "Variable", $):
+    private static final TokenType[] stage_read_all = new TokenType[]{
+            TokenType.Literal,
+            TokenType.Lambda,
+            TokenType.String,
+            TokenType.LRB,
+            TokenType.MarkupType,
+            TokenType.Coma,
+            TokenType.String,
+            TokenType.Coma,
+            TokenType.Dollar,
+            TokenType.RRB,
+            TokenType.Colon
+    };
+
+    //Number -> "Text"(MarkupType, "Variable", $("Regex")):
+    private static final TokenType[] stage_regex = new TokenType[]{
+            TokenType.Literal,
+            TokenType.Lambda,
+            TokenType.String,
+            TokenType.LRB,
+            TokenType.MarkupType,
+            TokenType.Coma,
+            TokenType.String,
+            TokenType.Coma,
+            TokenType.Dollar,
+            TokenType.LRB,
+            TokenType.String,
+            TokenType.RRB,
+            TokenType.RRB,
+            TokenType.Colon
+    };
+
+    //"Button" : "Response"
+    private static final TokenType[] button = new TokenType[]{
+            TokenType.String,
+            TokenType.Colon,
+            TokenType.String
+    };
+
     private boolean sequenceContains(List<Token> tokens, int start, TokenType[] value) {
         if (tokens.size() - start < value.length)
             return false;
@@ -18,99 +75,140 @@ public class Parser {
         return true;
     }
 
-    public Scripts parse(List<Token> tokens) {
+    private void addStage(
+            List<Stage> stages,
+            List<Button> data,
+            String dataVariable,
+            String regex,
+            Integer num,
+            String text,
+            String variable,
+            ButtonsType buttonsType
+    ) {
+        Stage stage = null;
+        if (dataVariable != null)
+            stage = new VariableStage(num, text, variable, buttonsType, regex, dataVariable);
+        else if (num != null)
+            stage = new DataStage(num, text, variable, buttonsType, regex, data);
+        if (stage != null)
+            stages.add(stage);
+    }
+
+    Scripts parse(List<Token> tokens) throws ParseException {
         List<Script> scripts = new ArrayList<>();
         List<Stage> stages = new ArrayList<>();
         List<Button> data = new ArrayList<>();
-        String scriptTitle = null;
-        int num = -1;
-        String text = null;
-        String var = null;
-        String variable = null;
-        ButtonsType type = null;
         for (int i = 0; i < tokens.size(); i++) {
-            if (sequenceContains(tokens, i, new TokenType[]{
-                    TokenType.Script,
-                    TokenType.LRB,
-                    TokenType.String,
-                    TokenType.RRB,
-                    TokenType.Colon
-            })) {
-                Stage stage;
-                if (var != null)
-                    stage = new VariableStage(num, text, variable, type, var);
-                else
-                    stage = new DataStage(num, text, variable, type, data);
-                stages.add(stage);
-                if (scriptTitle != null)
-                    scripts.add(new Script(scriptTitle, stages));
-                scriptTitle = ((TokenWithValue) tokens.get(i + 2)).getValue();
-                i += 4;
+            if (sequenceContains(tokens, i, script)) {
                 stages = new ArrayList<>();
-                data = new ArrayList<>();
-                num = -1;
-                text = null;
-                var = null;
-                variable = null;
-                type = null;
+                scripts.add(new Script(tokens.get(i + 2).getValue(), stages));
+                i += 4;
                 continue;
             }
-            if (sequenceContains(tokens, i, new TokenType[]{
-                    TokenType.Literal,
-                    TokenType.Lambda,
-                    TokenType.String,
-                    TokenType.LRB,
-                    TokenType.MarkupType,
-                    TokenType.Coma,
-                    TokenType.String,
-                    TokenType.RRB,
-                    TokenType.Colon
-            })) {
-                Stage stage = null;
-                if (var != null)
-                    stage = new VariableStage(num, text, variable, type, var);
-                else if (num != -1)
-                    stage = new DataStage(num, text, variable, type, data);
-                if (stage != null)
-                    stages.add(stage);
-                num = Integer.parseInt(((TokenWithValue) tokens.get(i)).getValue());
-                text = ((TokenWithValue) tokens.get(i + 2)).getValue();
-                type = ((TokenWithValue) tokens.get(i + 4)).getValue().equals("Inline") ? ButtonsType.Inline : ButtonsType.Reply;
-                variable = ((TokenWithValue) tokens.get(i + 6)).getValue();
-                var = null;
+
+            if (sequenceContains(tokens, i, stage)) {
                 data = new ArrayList<>();
+
+                String dataVar;
+                if (i + 9 < tokens.size()) {
+                    if (tokens.get(i + 9).getType().equals(TokenType.Variable))
+                        dataVar = tokens.get(i + 9).getValue();
+                    else
+                        dataVar = null;
+                } else
+                      dataVar = null;
+
+                addStage(
+                        stages,
+                        data,
+                        dataVar,
+                        null,
+                        Integer.valueOf(tokens.get(i).getValue()),
+                        tokens.get(i + 2).getValue(),
+                        tokens.get(i + 6).getValue(),
+                        tokens.get(i + 4).getValue().equals("Inline") ? ButtonsType.Inline : ButtonsType.Reply
+                );
+
                 i += 8;
+                if (dataVar != null)
+                    i++;
                 continue;
             }
-            if (sequenceContains(tokens, i, new TokenType[]{
-                    TokenType.String,
-                    TokenType.Colon,
-                    TokenType.String
-            })) {
-                String name = tokens.get(i).cast().getValue();
-                String response = tokens.get(i + 2).cast().getValue();
+
+            if (sequenceContains(tokens, i, stage_read_all)) {
+                data = new ArrayList<>();
+
+                String dataVar;
+                if (i + 11 < tokens.size()) {
+                    if (tokens.get(i + 11).getType().equals(TokenType.Variable))
+                        dataVar = tokens.get(i + 11).getValue();
+                    else
+                        dataVar = null;
+                } else
+                    dataVar = null;
+
+                addStage(
+                        stages,
+                        data,
+                        dataVar,
+                        ".*",
+                        Integer.valueOf(tokens.get(i).getValue()),
+                        tokens.get(i + 2).getValue(),
+                        tokens.get(i + 6).getValue(),
+                        tokens.get(i + 4).getValue().equals("Inline") ? ButtonsType.Inline : ButtonsType.Reply
+                );
+
+                i += 10;
+                if (dataVar != null)
+                    i++;
+                continue;
+            }
+
+            if (sequenceContains(tokens, i, stage_regex)) {
+                data = new ArrayList<>();
+
+                String dataVar;
+                if (i + 14 < tokens.size()) {
+                    if (tokens.get(i + 14).getType().equals(TokenType.Variable))
+                        dataVar = tokens.get(i + 14).getValue();
+                    else
+                        dataVar = null;
+                } else
+                    dataVar = null;
+
+                addStage(
+                        stages,
+                        data,
+                        dataVar,
+                        tokens.get(i + 10).getValue(),
+                        Integer.valueOf(tokens.get(i).getValue()),
+                        tokens.get(i + 2).getValue(),
+                        tokens.get(i + 6).getValue(),
+                        tokens.get(i + 4).getValue().equals("Inline") ? ButtonsType.Inline : ButtonsType.Reply
+                );
+
+                i += 13;
+                if (dataVar != null)
+                    i++;
+                continue;
+            }
+
+            if (sequenceContains(tokens, i, button)) {
+                String name = tokens.get(i).getValue();
+                String response = tokens.get(i + 2).getValue();
                 data.add(new Button(name, response));
                 i += 2;
                 continue;
             }
-            if (tokens.get(i).getType().equals(TokenType.Variable)) {
-                var = tokens.get(i).cast().getValue();
+
+            if (tokens.get(i).getType().equals(TokenType.String)) {
+                String name = tokens.get(i).getValue();
+                data.add(new Button(name, name));
                 continue;
             }
-            if (tokens.get(i).getType().equals(TokenType.String)) {
-                String name = tokens.get(i).cast().getValue();
-                data.add(new Button(name, name));
-            }
+
+            throw new ParseException("Unexpected token: " + tokens.get(i).getType() + (tokens.get(i).getValue() == null? "" : " (" + tokens.get(i).getValue() + ")"));
         }
-        Stage stage = null;
-        if (var != null)
-            stage = new VariableStage(num, text, variable, type, var);
-        else if (text != null)
-            stage = new DataStage(num, text, variable, type, data);
-        if (stage != null)
-            stages.add(stage);
-        if (stages.size() > 0)
-            scripts.add(new Script(scriptTitle, stages));
         return new Scripts(scripts);
     }
 }

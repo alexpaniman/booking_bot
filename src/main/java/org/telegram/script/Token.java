@@ -1,18 +1,26 @@
 package org.telegram.script;
 
+@SuppressWarnings("WeakerAccess")
 public class Token {
     private TokenType type;
+    private String value;
 
-    public Token(TokenType type) {
+    public Token(TokenType type, String value) {
         this.type = type;
+        this.value = value;
+    }
+
+    public Token(TokenType tokenType) {
+        this.type = tokenType;
+        this.value = null;
     }
 
     public TokenType getType() {
         return type;
     }
 
-    public TokenWithValue cast() throws ClassCastException{
-        return ((TokenWithValue) this);
+    public String getValue() {
+        return value;
     }
 
     @Override

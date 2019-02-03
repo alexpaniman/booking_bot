@@ -8,6 +8,7 @@ import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.GetFile;
 import org.telegram.telegrambots.api.methods.send.*;
 import org.telegram.telegrambots.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.api.objects.CallbackQuery;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
@@ -209,12 +210,14 @@ public class Polling extends TelegramLongPollingBot {
         if (update.hasMessage()) {
             Message message = update.getMessage();
             User user = findUser(message);
+            long chat_id = message.getChatId();
+            if (!bot.onUpdate(update, user, chat_id)) {
+                user.updateArgument("status", "null");
+                return;
+            }
             if (message.hasText()) {
                 String text = message.getText();
                 Command command = Command.parseCommand("/", text);
-                long chat_id = message.getChatId();
-                if (!bot.onUpdate(update, user, chat_id))
-                    return;
                 String value = user.getArgument("status");
                 if (value != null && !value.equalsIgnoreCase("NULL")) {
                     Response response = gson.fromJson(value, Response.class);
@@ -223,36 +226,43 @@ public class Polling extends TelegramLongPollingBot {
                             .get(response.getScript())
                             .getStages()
                             .get(response.getStage());
-                    response.getVarMap().put(curr.getVariable(), text);
-                    if (scripts
-                            .getScripts()
-                            .get(response.getScript())
-                            .getStages()
-                            .size() <= response
-                            .getStage() + 1) {
-                        bot.onBuilderResponse(
+                    Boolean test = curr.test(text);
+                    if (test != null) {
+                        if (!test) {
+                            user.updateArgument("status", "null");
+                            return;
+                        }
+                        response.getVarMap().put(curr.getVariable(), text);
+                        if (scripts
+                                .getScripts()
+                                .get(response.getScript())
+                                .getStages()
+                                .size() <= response
+                                .getStage() + 1) {
+                            bot.onBuilderResponse(
+                                    user,
+                                    chat_id,
+                                    scripts
+                                            .getScripts()
+                                            .get(response.getScript())
+                                            .getTitle(),
+                                    response.getVarMap()
+                            );
+                            user.updateArgument("status", "null");
+                            return;
+                        }
+                        stage(
+                                response,
                                 user,
                                 chat_id,
                                 scripts
                                         .getScripts()
                                         .get(response.getScript())
-                                        .getTitle(),
-                                response.getVarMap()
+                                        .getStages()
+                                        .get(response.incrementStage())
                         );
-                        user.updateArgument("status", "null");
-                        return;
+                        user.updateArgument("status", gson.toJson(response));
                     }
-                    stage(
-                            response,
-                            user,
-                            chat_id,
-                            scripts
-                                    .getScripts()
-                                    .get(response.getScript())
-                                    .getStages()
-                                    .get(response.incrementStage())
-                    );
-                    user.updateArgument("status", gson.toJson(response));
                 }
                 if (command == null)
                     bot.onText(
@@ -268,9 +278,6 @@ public class Polling extends TelegramLongPollingBot {
                     );
             }
             if (message.hasPhoto()) {
-                long chat_id = message.getChatId();
-                if (!bot.onUpdate(update, user, chat_id))
-                    return;
                 bot.onImages(
                         message
                                 .getPhoto()
@@ -288,9 +295,6 @@ public class Polling extends TelegramLongPollingBot {
                 );
             }
             if (message.hasDocument()) {
-                long chat_id = message.getChatId();
-                if (!bot.onUpdate(update, user, chat_id))
-                    return;
                 try {
                     bot.onDocument(
                             downloadFile(
@@ -317,8 +321,10 @@ public class Polling extends TelegramLongPollingBot {
             Command command = Command.parseCommand("/", data);
             User user = findUser(CQ);
             long chat_id = CQ.getMessage().getChatId();
-            if (!bot.onUpdate(update, user, chat_id))
+            if (!bot.onUpdate(update, user, chat_id)) {
+                user.updateArgument("status", "null");
                 return;
+            }
             String value = user.getArgument("status");
             if (value != null && !value.equalsIgnoreCase("NULL")) {
                 Response response = gson.fromJson(value, Response.class);
@@ -426,46 +432,45 @@ public class Polling extends TelegramLongPollingBot {
     }
 
     public boolean deleteMessage(long chat_id, long message_id) {
-        DeleteMessage dm = new DeleteMessage().setChatId(String.valueOf(chat_id)).setMessageId((int) message_id);
+        DeleteMessage dm = new DeleteMessage()
+                .setChatId(String.valueOf(chat_id))
+                .setMessageId((int) message_id);
         try {
-            deleteMessage(dm);
-            return true;
+            return deleteMessage(dm);
         } catch (TelegramApiException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    public boolean sendMessage(long id, String text) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(id);
-        sendMessage.enableMarkdown(true);
-        sendMessage.setText(text);
+    public Integer sendMessage(long id, String text) {
+        SendMessage sendMessage = new SendMessage()
+                .setChatId(id)
+                .enableMarkdown(true)
+                .setText(text);
         try {
-            sendMessage(sendMessage);
-            return true;
+            return sendMessage(sendMessage).getMessageId();
         } catch (TelegramApiException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
-    public boolean sendMessage(long id, String text, ReplyKeyboard replyKeyboard) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setReplyMarkup(replyKeyboard);
-        sendMessage.setText(text);
-        sendMessage.setChatId(id);
-        sendMessage.enableMarkdown(true);
+    public Integer sendMessage(long id, String text, ReplyKeyboard replyKeyboard) {
+        SendMessage sendMessage = new SendMessage()
+                .setReplyMarkup(replyKeyboard)
+                .setText(text)
+                .setChatId(id)
+                .enableMarkdown(true);
         try {
-            sendMessage(sendMessage);
-            return true;
+            return sendMessage(sendMessage).getMessageId();
         } catch (TelegramApiException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
-    public boolean sendMessage(long id, String text, int per_row, String... labels) {
+    public Integer sendMessage(long id, String text, int per_row, String... labels) {
         SendMessage sendMessage = new SendMessage();
         List<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow row = new KeyboardRow();
@@ -479,17 +484,36 @@ public class Polling extends TelegramLongPollingBot {
         if (row.size() > 0)
             keyboard.add(row);
         ReplyKeyboardMarkup RKM = new ReplyKeyboardMarkup().setKeyboard(keyboard);
-        sendMessage.setReplyMarkup(RKM);
-        sendMessage.setText(text);
-        sendMessage.setChatId(id);
-        sendMessage.enableMarkdown(true);
+        sendMessage.setReplyMarkup(RKM)
+                .setText(text)
+                .setChatId(id)
+                .enableMarkdown(true);
         try {
-            sendMessage(sendMessage);
-            return true;
+            return sendMessage(sendMessage).getMessageId();
         } catch (TelegramApiException e) {
             e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean editMessage(long chat_id, int message_id, String text, InlineKeyboardMarkup rk) {
+        EditMessageText emt = new EditMessageText()
+                .enableMarkdown(true)
+                .setText(text)
+                .setChatId(chat_id)
+                .setMessageId(message_id);
+        if (rk != null)
+            emt.setReplyMarkup(rk);
+        try {
+            editMessageText(emt);
+            return true;
+        } catch (Exception e) {
             return false;
         }
+    }
+
+    public boolean editMessage(long chat_id, int message_id, String text) {
+        return editMessage(chat_id, message_id, text, null);
     }
 
     public boolean sendDocument(long id, java.io.File document) {

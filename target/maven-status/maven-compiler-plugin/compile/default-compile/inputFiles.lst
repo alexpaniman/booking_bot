@@ -1,8 +1,8 @@
 D:\Проекты Java\BookingBot\src\main\java\org\telegram\update\User.java
 D:\Проекты Java\BookingBot\src\main\java\org\telegram\script\DataStage.java
-D:\Проекты Java\BookingBot\src\main\java\org\telegram\script\TokenWithValue.java
 D:\Проекты Java\BookingBot\src\main\java\org\telegram\script\TokenType.java
 D:\Проекты Java\BookingBot\src\main\java\org\telegram\script\ButtonsType.java
+D:\Проекты Java\BookingBot\src\main\java\org\telegram\script\LexerException.java
 D:\Проекты Java\BookingBot\src\main\java\org\telegram\script\Stage.java
 D:\Проекты Java\BookingBot\src\main\java\BookingBot.java
 D:\Проекты Java\BookingBot\src\main\java\org\telegram\script\Lexer.java
@@ -10,6 +10,7 @@ D:\Проекты Java\BookingBot\src\main\java\org\telegram\database\URLConnector.java
 D:\Проекты Java\BookingBot\src\main\java\org\telegram\script\Response.java
 D:\Проекты Java\BookingBot\src\main\java\org\telegram\script\Token.java
 D:\Проекты Java\BookingBot\src\main\java\org\telegram\processor\Command.java
+D:\Проекты Java\BookingBot\src\main\java\org\telegram\script\ParseException.java
 D:\Проекты Java\BookingBot\src\main\java\org\telegram\script\VariableStage.java
 D:\Проекты Java\BookingBot\src\main\java\org\telegram\script\Scripts.java
 D:\Проекты Java\BookingBot\src\main\java\org\telegram\database\HerokuDBConnector.java

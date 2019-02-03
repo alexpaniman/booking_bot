@@ -1,14 +1,12 @@
 package org.telegram.script;
 
-import com.google.gson.GsonBuilder;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
 public class ScriptsCompiler {
-    public Scripts compile(String path) {
+    public Scripts compile(String path) throws LexerException, ParseException {
         File file = new File(path);
         if (!file.exists())
             return null;

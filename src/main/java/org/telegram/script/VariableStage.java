@@ -3,8 +3,8 @@ package org.telegram.script;
 public class VariableStage extends Stage {
     private String dataVariable;
 
-    public VariableStage(int ind, String text, String variable, ButtonsType buttonsType, String dataVariable) {
-        super(ind, text, variable, buttonsType);
+    VariableStage(int index, String text, String variable, ButtonsType buttonsType, String regex, String dataVariable) {
+        super(index, text, variable, buttonsType, regex);
         this.dataVariable = dataVariable;
     }
 
