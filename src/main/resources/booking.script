@@ -13,3 +13,20 @@ Script("Add"):
 Script("Start"):
     1 -> "Введите свое настоящее имя:"(Inline, "FirstName", $):
     1 -> "Введите свою настоящую фамилию:"(Inline, "LastName", $):
+Script("BanManagement"):
+    2 -> "Выбирите жертву:"(Inline, "Id"): <users>
+    2 -> "Выбирите действие или введите время в часах, на которое будет продлён бан:"(Inline, "Time", $("\d+.{0,1}\d*")):
+        "Вечный бан" : "infinity"
+        "Разбанить" : "cancel"
+Script("Delete"):
+    1 -> "Выберите предмет:"(Inline, "Subject"):
+        "Всемирная история" : "WorldHistory"
+        "История Украины"   : "UkrainianHistory"
+    2 -> "Выберите дату:"(Inline, "Date"): <date>
+    2 -> "Введите паттерн пунктов:"(Inline, "Items", $("^(§\d+\((\d+ *[-,] *)*\d+\) *, *)* *§\d+\((\d+ *[-,] *)*\d+\) *$")):
+Script("UnReserve"):
+    1 -> "Выберите предмет:"(Inline, "Subject"):
+        "Всемирная история" : "WorldHistory"
+        "История Украины"   : "UkrainianHistory"
+    2 -> "Выберите дату:"(Inline, "Date"): <date>
+    2 -> "Выберите пункт:"(Inline, "Item"): <items>
