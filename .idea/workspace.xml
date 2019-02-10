@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="51b39136-9270-46d7-ad3d-af494f096730" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/alias.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BookingBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BookingBot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/booking.script" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/booking.script" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
@@ -84,11 +80,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="booking.script" pinned="false" current-in-tab="false">
+      <file leaf-file-name="booking.script" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/resources/booking.script">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
-              <caret line="16" column="5" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
+            <state relative-caret-position="459">
+              <caret line="17" column="10" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="84" />
             </state>
           </provider>
         </entry>
@@ -102,11 +98,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BookingBot.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BookingBot.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/BookingBot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2896">
-              <caret line="454" selection-start-line="454" selection-end-line="454" />
+            <state relative-caret-position="229">
+              <caret line="49" column="6" lean-forward="true" selection-start-line="49" selection-start-column="6" selection-end-line="49" selection-end-column="6" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="initializer##0;class#BookingBot#0" />
@@ -119,6 +115,8 @@
                 <element signature="method#repeat#0;class#BookingBot#0" />
                 <element signature="method#list#0;class#BookingBot#0" />
                 <element signature="method#answers#0;class#BookingBot#0" />
+                <element signature="method#onText#0;class#BookingBot#0" />
+                <element signature="method#onCommand#0;class#BookingBot#0" />
                 <element signature="method#fromSubject#0;class#BookingBot#0" />
                 <element signature="method#onBuilderResponse#0;class#BookingBot#0" />
                 <element signature="method#forRegex#0;class#BookingBot#0" />
@@ -126,15 +124,6 @@
                 <element signature="method#setupDataVariable#0;class#BookingBot#0" />
                 <element signature="method#onUpdate#0;class#BookingBot#0" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="alias.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/alias.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -165,10 +154,10 @@
         <option value="$PROJECT_DIR$/src/main/java/org/telegram/script/Parser.java" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/55bec393-6c16-43b1-929b-a9888f3443e8/console.sql" />
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/resources/booking.script" />
         <option value="$PROJECT_DIR$/src/main/java/org/telegram/shell/Polling.java" />
         <option value="$PROJECT_DIR$/src/main/resources/alias.json" />
         <option value="$PROJECT_DIR$/src/main/java/BookingBot.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/booking.script" />
       </list>
     </option>
   </component>
@@ -424,12 +413,12 @@
       <workItem from="1549189632102" duration="18354000" />
       <workItem from="1549293010531" duration="7565000" />
       <workItem from="1549651002070" duration="1614000" />
-      <workItem from="1549718782640" duration="24331000" />
+      <workItem from="1549718782640" duration="24965000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="199649000" />
+    <option name="totallyTimeSpent" value="200283000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1080" extended-state="6" />
@@ -453,7 +442,7 @@
       <window_info anchor="bottom" id="Java Enterprise" order="7" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.33769062" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.0" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.5832522" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32132426" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17916666" />
       <window_info anchor="right" id="Bean Validation" order="3" />
@@ -720,13 +709,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/booking.script">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="16" column="5" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/telegram/shell/Polling.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-76">
@@ -774,8 +756,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BookingBot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2896">
-          <caret line="454" selection-start-line="454" selection-end-line="454" />
+        <state relative-caret-position="229">
+          <caret line="49" column="6" lean-forward="true" selection-start-line="49" selection-start-column="6" selection-end-line="49" selection-end-column="6" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="initializer##0;class#BookingBot#0" />
@@ -788,6 +770,8 @@
             <element signature="method#repeat#0;class#BookingBot#0" />
             <element signature="method#list#0;class#BookingBot#0" />
             <element signature="method#answers#0;class#BookingBot#0" />
+            <element signature="method#onText#0;class#BookingBot#0" />
+            <element signature="method#onCommand#0;class#BookingBot#0" />
             <element signature="method#fromSubject#0;class#BookingBot#0" />
             <element signature="method#onBuilderResponse#0;class#BookingBot#0" />
             <element signature="method#forRegex#0;class#BookingBot#0" />
@@ -795,6 +779,13 @@
             <element signature="method#setupDataVariable#0;class#BookingBot#0" />
             <element signature="method#onUpdate#0;class#BookingBot#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/booking.script">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="17" column="10" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="84" />
         </state>
       </provider>
     </entry>
