@@ -11,6 +11,7 @@ import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.update.User;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.sql.PreparedStatement;
@@ -702,12 +703,14 @@ public class BookingBot implements Bot {
         String banStr = user.getArgument("ban");
         if (banStr.equals("Infinity")) {
             user.updateArgument("status", "null");
+            bot.sendPhoto(chat_id, new File("src/main/resources/ban.jpg"));
             bot.sendMessage(chat_id, "Вы находитесь в перманентном бане! Не пытайтесь выбраться. Это... невозможно!");
             return false;
         }
         long ban = Long.parseLong(banStr);
         if (ban > System.currentTimeMillis()) {
             user.updateArgument("status", "null");
+            bot.sendPhoto(chat_id, new File("src/main/resources/ban.jpg"));
             bot.sendMessage(chat_id, "Вы находитесь в временном бане. Он закончится через " + String.format("%.2f", Math.ceil((ban - System.currentTimeMillis()) * 100 / 3.6e+6) / 100) + " часов!");
             return false;
         }
