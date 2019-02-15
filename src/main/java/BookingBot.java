@@ -35,7 +35,8 @@ public class BookingBot implements Bot {
         try {
             alias = gson.fromJson(
                     new FileReader("src/main/resources/alias.json"),
-                    new TypeToken<Map<String, String>>() {}.getType()
+                    new TypeToken<Map<String, String>>() {
+                    }.getType()
             );
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -509,6 +510,10 @@ public class BookingBot implements Bot {
                 case "Add":
                     PreparedStatement ps = heroku.getConnection().prepareStatement("INSERT INTO ITEMS VALUES(?, '" + varMap.get("Subject") + "', '" + varMap.get("Date") + "', NULL)");
                     List<String> items = subItems(varMap.get("Item"));
+                    if (items.size() > 25) {
+                        bot.sendMessage(chat_id, "Вы попытались добавить слишком много пунктов: " + items.size() + " из 25!");
+                        return;
+                    }
                     if (items.size() == 0)
                         return;
                     StringJoiner sj = new StringJoiner(", ");
@@ -535,17 +540,14 @@ public class BookingBot implements Bot {
                     String subject = varMap.get("Subject");
                     String date = varMap.get("Date");
                     String item = varMap.get("Item");
-                    boolean success = statement().execute(
+                    statement().execute(
                             "UPDATE items SET reserved = NULL WHERE " +
                                     "reserved IS NOT NULL " +
                                     "AND subject = '" + subject + "' " +
                                     "AND date = '" + date + "' " +
                                     "AND item = '" + item + "'"
                     );
-                    if (success)
-                        bot.sendMessage(chat_id, "Вы успешно убрали бронь с " + item + " пункта по " + fromSubject(subject) + " " + date + " числа");
-                    else
-                        bot.sendMessage(chat_id, "Произвести эту операцию не удалось!");
+                    bot.sendMessage(chat_id, "Вы успешно убрали бронь с " + item + " пункта по " + fromSubject(subject) + " " + date + " числа");
                     return;
                 case "Delete":
                     subject = varMap.get("Subject");
@@ -610,7 +612,11 @@ public class BookingBot implements Bot {
                     List<String> list = forRegex("\\d+", val);
                     int first = Integer.parseInt(list.get(0));
                     int second = Integer.parseInt(list.get(1));
-                    for (int i = Math.min(first, second); i <= Math.max(first, second); i++)
+                    int min = Math.min(first, second);
+                    int max = Math.max(first, second);
+                    if (max - min > 100000)
+                        max = min + 99999;
+                    for (int i = min; i <= max; i++)
                         items.add(par + "(" + i + ")");
                 } else {
                     items.add(par + "(" + val + ")");
@@ -696,7 +702,22 @@ public class BookingBot implements Bot {
 
     @Override
     public boolean onUpdate(Update update, User user, long chat_id) {
-        if (update.hasMessage() && update.getMessage().getText().equals("/cancellation")) {
+        if (update.hasMessage() && update.getMessage().hasText() &&
+                (
+                        update
+                                .getMessage()
+                                .getText()
+                                .equals("/cancellation") ||
+                                alias
+                                        .entrySet()
+                                        .stream()
+                                        .filter(entry -> entry.getValue().equals("cancellation"))
+                                        .map(Map.Entry::getKey)
+                                        .peek(System.out::println)
+                                        .anyMatch(str -> str.equals(update.getMessage().getText()))
+                )
+            ) {
+            bot.sendMessage(chat_id, "Текущие действия успешно отменены!");
             user.updateArgument("status", "null");
             return false;
         }
